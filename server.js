@@ -1,45 +1,70 @@
-// Simulação de um servidor simples para demonstrar a lógica (não um servidor real)
+// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
-const PORT = 3000;
+const mongoose = require('mongoose');
+const Usuario = require('./models/usuario');
 
-let usuarios = [];
-let moedas = {};
+const app = express();
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = 'mongodb://localhost:27017/servidor-fivem'; // URL de conexão com o MongoDB
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.post('/registrar', (req, res) => {
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+})
+.then(() => console.log('Conectado ao MongoDB'))
+.catch(err => console.error('Erro ao conectar ao MongoDB:', err));
+
+// Rota para registrar um novo usuário
+app.post('/registrar', async (req, res) => {
     const { email, senha, nome } = req.body;
-    if (usuarios.find(usuario => usuario.nome === nome || usuario.email === email)) {
-        return res.status(400).send('Usuário já existe');
+    try {
+        const usuario = await Usuario.create({ email, senha, nome });
+        res.status(201).send('Usuário registrado com sucesso');
+    } catch (err) {
+        res.status(400).send('Erro ao registrar usuário');
     }
-    usuarios.push({ email, senha, nome });
-    moedas[nome] = 0;
-    res.send('Usuário registrado com sucesso');
 });
 
-app.post('/login', (req, res) => {
+// Rota para realizar login
+app.post('/login', async (req, res) => {
     const { nome, senha } = req.body;
-    const usuario = usuarios.find(usuario => usuario.nome === nome && usuario.senha === senha);
-    if (usuario) {
-        res.send('Login bem-sucedido');
-    } else {
-        res.status(400).send('Nome ou senha incorretos');
+    try {
+        const usuario = await Usuario.findOne({ nome, senha });
+        if (usuario) {
+            res.send('Login bem-sucedido');
+        } else {
+            res.status(400).send('Nome ou senha incorretos');
+        }
+    } catch (err) {
+        res.status(500).send('Erro ao realizar login');
     }
 });
 
-app.post('/doarMoedas', (req, res) => {
+// Rota para doar moedas
+app.post('/doarMoedas', async (req, res) => {
     const { nome, quantidade } = req.body;
-    if (moedas[nome] !== undefined) {
-        moedas[nome] += quantidade;
-        res.send(`Doado ${quantidade} moedas para ${nome}`);
-    } else {
-        res.status(400).send('Usuário não encontrado');
+    try {
+        const usuario = await Usuario.findOne({ nome });
+        if (usuario) {
+            // Atualizar a quantidade de moedas do usuário no banco de dados
+            usuario.moedasFivem += parseInt(quantidade);
+            await usuario.save();
+            res.send(`Doado ${quantidade} moedas para ${nome}`);
+        } else {
+            res.status(400).send('Usuário não encontrado');
+        }
+    } catch (err) {
+        res.status(500).send('Erro ao doar moedas');
     }
 });
 
+// Inicialização do servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
