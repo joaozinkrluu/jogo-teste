@@ -2,12 +2,13 @@
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 let players = {};
 
@@ -26,9 +27,6 @@ wss.on('connection', (ws) => {
                     players[data.id].y = data.y;
                 }
                 broadcast({ type: 'updatePlayers', players });
-                break;
-            case 'shoot':
-                broadcast(data);
                 break;
         }
     });
