@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Painel de Administração</h1>
+    </header>
+    <main>
+        <section id="admin">
+            <h2>Doar Moedas FiveM</h2>
+            <input type="text" id="usuarioNome" placeholder="Nome do Usuário" required>
+            <input type="number" id="quantidadeMoedas" placeholder="Quantidade de Moedas" required>
+            <button onclick="doarMoedas(document.getElementById('usuarioNome').value, document.getElementById('quantidadeMoedas').value)">Doar</button>
+        </section>
+    </main>
+    <script>
+        function doarMoedas(nome, quantidade) {
+            // Aqui você adicionaria lógica para doar moedas para o usuário no servidor
+            alert(`Doado ${quantidade} moedas para ${nome}!`);
+        }
+    </script>
+</body>
+</html>
