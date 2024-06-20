@@ -3,20 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolinha Atiradora</title>
+    <title>Servidor FiveM - Produtos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="loginScreen" class="screen">
-        <div class="login-container">
-            <h2>Login</h2>
-            <input type="text" id="playerNameInput" placeholder="Digite seu nome">
-            <button onclick="startGame()">Iniciar Jogo</button>
-        </div>
-    </div>
-
-    <canvas id="gameCanvas"></canvas>
-
-    <script src="script.js"></script>
+    <header>
+        <h1>Bem-vindo ao Servidor FiveM</h1>
+    </header>
+    <main>
+        <section id="produtos">
+            <h2>Produtos</h2>
+            <div class="produto">
+                <h3>Livery</h3>
+                <p>Descrição do produto Livery.</p>
+                <button class="compre-agora" onclick="compreAgora('Livery')">Compre Agora</button>
+            </div>
+            <div class="produto">
+                <h3>GTR35</h3>
+                <p>Descrição do produto GTR35.</p>
+                <button class="compre-agora" onclick="compreAgora('GTR35')">Compre Agora</button>
+            </div>
+        </section>
+    </main>
+    <script>
+        function compreAgora(produto) {
+            alert(`Você escolheu comprar o produto: ${produto}`);
+            // Aqui você pode adicionar lógica para redirecionar para a página de compra ou adicionar ao carrinho
+        }
+    </script>
 </body>
 </html>
