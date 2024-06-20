@@ -9,6 +9,10 @@
 <body>
     <header>
         <h1>Bem-vindo ao Servidor FiveM</h1>
+        <nav>
+            <a href="carrinho.html">Carrinho</a>
+            <a href="login.html">Login/Registrar</a>
+        </nav>
     </header>
     <main>
         <section id="produtos">
@@ -16,20 +20,15 @@
             <div class="produto">
                 <h3>Livery</h3>
                 <p>Descrição do produto Livery.</p>
-                <button class="compre-agora" onclick="compreAgora('Livery')">Compre Agora</button>
+                <button class="compre-agora" onclick="adicionarAoCarrinho('Livery')">Adicionar ao Carrinho</button>
             </div>
             <div class="produto">
                 <h3>GTR35</h3>
                 <p>Descrição do produto GTR35.</p>
-                <button class="compre-agora" onclick="compreAgora('GTR35')">Compre Agora</button>
+                <button class="compre-agora" onclick="adicionarAoCarrinho('GTR35')">Adicionar ao Carrinho</button>
             </div>
         </section>
     </main>
-    <script>
-        function compreAgora(produto) {
-            alert(`Você escolheu comprar o produto: ${produto}`);
-            // Aqui você pode adicionar lógica para redirecionar para a página de compra ou adicionar ao carrinho
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
