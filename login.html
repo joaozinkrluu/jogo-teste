@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Registrar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Login / Registrar</h1>
+    </header>
+    <main>
+        <section id="login">
+            <h2>Login</h2>
+            <input type="text" id="loginNome" placeholder="Nome" required>
+            <input type="password" id="loginSenha" placeholder="Senha" required>
+            <button onclick="login(document.getElementById('loginNome').value, document.getElementById('loginSenha').value)">Login</button>
+        </section>
+        <section id="registrar">
+            <h2>Registrar</h2>
+            <input type="email" id="registrarEmail" placeholder="Email" required>
+            <input type="password" id="registrarSenha" placeholder="Senha" required>
+            <input type="password" id="confirmarSenha" placeholder="Confirmar Senha" required>
+            <input type="text" id="registrarNome" placeholder="Nome" required>
+            <button onclick="registrar(document.getElementById('registrarEmail').value, document.getElementById('registrarSenha').value, document.getElementById('confirmarSenha').value, document.getElementById('registrarNome').value)">Registrar</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
