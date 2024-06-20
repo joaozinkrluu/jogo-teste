@@ -16,10 +16,6 @@ const player = {
     id: null
 };
 
-const bullets = [];
-const bulletSize = 5;
-const bulletSpeed = 7;
-
 let players = {};
 
 const socket = new WebSocket('ws://localhost:8080');
@@ -31,32 +27,14 @@ socket.onopen = () => {
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
-    switch (data.type) {
-        case 'updatePlayers':
-            players = data.players;
-            break;
-        case 'shoot':
-            bullets.push(data.bullet);
-            break;
+    if (data.type === 'updatePlayers') {
+        players = data.players;
     }
 };
 
 canvas.addEventListener('mousemove', function(event) {
     mouseX = event.clientX;
     mouseY = event.clientY;
-});
-
-canvas.addEventListener('mousedown', function(event) {
-    if (event.button === 0) {
-        shooting = true;
-        shoot();
-    }
-});
-
-canvas.addEventListener('mouseup', function(event) {
-    if (event.button === 0) {
-        shooting = false;
-    }
 });
 
 document.addEventListener('keydown', function(event) {
@@ -86,7 +64,6 @@ document.addEventListener('keyup', function(event) {
 function drawPlayer(p) {
     ctx.save();
     ctx.translate(p.x, p.y);
-    ctx.rotate(Math.atan2(mouseY - p.y, mouseX - p.x));
 
     ctx.beginPath();
     ctx.arc(0, 0, p.size, 0, Math.PI * 2);
@@ -113,44 +90,6 @@ function movePlayer() {
     socket.send(JSON.stringify({ type: 'movePlayer', id: player.id, x: player.x, y: player.y }));
 }
 
-function drawBullets() {
-    bullets.forEach(bullet => {
-        ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bulletSize, 0, Math.PI * 2);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.closePath();
-    });
-}
-
-function moveBullets() {
-    bullets.forEach((bullet, index) => {
-        bullet.x += bullet.dx;
-        bullet.y += bullet.dy;
-
-        if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
-            bullets.splice(index, 1);
-        }
-    });
-}
-
-function shoot() {
-    const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
-    const bullet = {
-        x: player.x,
-        y: player.y,
-        dx: Math.cos(angle) * bulletSpeed,
-        dy: Math.sin(angle) * bulletSpeed
-    };
-
-    bullets.push(bullet);
-    socket.send(JSON.stringify({ type: 'shoot', bullet }));
-
-    if (shooting) {
-        setTimeout(shoot, 100);
-    }
-}
-
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -162,8 +101,6 @@ function update() {
 
     drawPlayer(player);
     movePlayer();
-    drawBullets();
-    moveBullets();
 
     requestAnimationFrame(update);
 }
